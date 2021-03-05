@@ -1,0 +1,7 @@
+FROM openjdk:8
+
+ADD ./build/libs/github-0.0.1-SNAPSHOT.war ./github/github.war
+
+EXPOSE 8082
+
+ENTRYPOINT ["java", "-jar", "./github/github.war"]
