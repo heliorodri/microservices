@@ -1,90 +1,77 @@
-# tema 7 - Microservices
+# Microservices
+> For this project we are using the following: ubuntu 20.04 and docker 19.03
 
-##  Observação: 
-> para este projeto foram utilizadas as seguintes configurações: ubuntu 20.04 e docker 19.03, caso você precise de uma versão diferente do docker ou possua um sistema operacional diferente você poderá seguir a documentação oficial através deste link: https://docs.docker.com/get-docker/
-
-
-## O primeiro passo para garantir que tudo ocorrerá dentro do previsto é, caso você não possua, instalar o docker. Para isso você pode seguir este passo a passo: 
+## Installing docker: 
 -   *https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04-pt*
-#
 
-# Agora devemos gerar as chaves de acesso para que possamos acessar as APIs do twitter e do github sem problemas
+# Generating the API Keys
 
-## Chaves de acesso do twitter:
--   Para isso você deve acessar *https://developer.twitter.com/en/portal/dashboard*, logar com sua conta (caso não tenha, ou deseje uma nova, você podera criar), criar um projeto e adicionar um novo app.
+## Twitter API key:
+-   Access *https://developer.twitter.com/en/portal/dashboard*, log in to your account, create a project, and add a new app.
+-   After that you should go to *Projects & Apps* and select the app you just create
+-   Accessing *Keys and Tokens*, then go to the specific key clicking in *view keys* under *Apps* section
 
--   Feito isso você deve ir até a aba *Projects & Apps* no menu lateral e selecionar o app que você criou.
+-   You will add the keys in the *application.properties* file that is located in *./tema7/twitter/src/main/resources/*
+-   it will look like this:
 
--   Após isso você verá a aba *Keys and Tokens* logo abaixo do nome do seu app, selecione esta aba, selecione *view keys* e você verá suas chaves de acesso
+    spring.social.twitter.appId=INSIRA_AQUI_SUA_API_KEY
+    spring.social.twitter.appSecret=INSIRA_AQUI_SUA_API_KEY_SECRET
 
--   Antes de copiarmos as chaves você deve localizar o arquivo *application.properties* que está localizado em *./tema7/twitter/src/main/resources/*. Nele iremos informar as chaves
+-   Now, go to "Access Token & Secret" and you will see two keys: *Access token* and *Access token secret*
+-   Copy the values and add them to your properties file as before:
 
--   A chave *API Key* deve ser copiada para o arquivo onde está informada a chave *"spring.social.twitter.appId"*
+    twitter.access.token=INSIRA_AQUI_SEU_TOKEN
+    twitter.access.token.secret=INSIRA_AQUI_SEU_TOKEN_SECRET
 
--   A chave *API key secret* deve ser copiada para o arquivo onde está informada a chave *"spring.social.twitter.appSecret"*
 
--   A chave *API key secret* deve ser copiada para o arquivo onde está informada a chave *"spring.social.twitter.appSecret"*
+## Github API Keys:
+-   Access  *https://github.com/*, log in to your account, create a project and add a new app.
 
--   Agora você deve encontrar a sessão "Access Token & Secret" um pouco mais abaixo na pagina e selecionar *"Generate"*
+-   Then you should go to the *Settings* page, and then go to *developer settings* and select the *Personal access tokens* option
+-   where you will see *Generate new token*, click on it
 
--   Feito isso você verá duas chaves: *Access token* e *Access token secret*
+-   You will be asked to inform a description for your key
 
--   A chave *Acecss token* deve ser copiada para o arquivo onde está informada a chave *"spring.social.twitter.token"*
+-   Then, click on *generate token*
 
--   A chave *Acecss token* deve ser copiada para o arquivo onde está informada a chave *"spring.social.twitter.token.secret"*
+-   Copy the key and paste it on application.properties located in *./tema7/github/src/main/resources/
+-   You also need to inform your github username
+-   The configurations will look like this:
 
--   Com isso a configuração para accesso à API do twitter está finalizada
+    spring.social.github.login=INSIRA_AQUI_SEU_USUARIO
+    spring.social.github.token=INSIRA_AQUI_SEU_TOKEN
 
-## Chaves de acesso do Github:
--   Para isso você deve acessar *https://github.com/*, logar com sua conta (caso não tenha, ou deseje uma nova, você podera criar), criar um projeto e adicionar um novo app.
+## Using the terminal, go to the application's folder *./tema7*, and run the following command, that will create and run the containers
 
--   Feito isso você deve ir ir até a aba *settings*, que pode ser acessada pela foto de perfil no canto superior direito
-
--   Após isso você deve selecionar *developer settings* no menu lateral e logo após o carregamento da pagina, você irá selecionar a opção *Personal access tokens* tambem no menu lateral
-
--   Na pagina que será carregada você verá a opção *Generate new token*, clique nela
-
--   Você precisará informar uma descrição para a chave de acesso, aconselho a utillizar *"tema7"*, e selecionar o escopo da chave,  que deve ser a opção *repo*. 
-
--   Feito isso, no fim da pagina você deve clicar em *generate token*
-
--   Você verá uma chave criada, copie ela e cole na chave *spring.social.github.token* no arquivo application.properties que está localizado em *./tema7/github/src/main/resources/
-
--   Você também deverá informar o seu usuário na chave *spring.social.github.login* que está, também  no arquivo *application.resources*
-
--   Com isso a configuração para accesso à API do twitter está finalizada
-
-## Com o docker instalado e as configurações de acesso definidas você deverá ir, pelo terminal, até o diretório da aplicação, *./tema7*, e rodar o script para criar e iniciar os containers, para isso basta executar o seguinte comando:
     sudo bash startup.sh
 
-## Pronto, os servições estarão rodando, se desejar encerrar o processo você pode executar, dentro do mesmo diretório, o comando
+## Done, the services are up! In case you want to stop them just run the following command:
+
     sudo bash stop.sh
 
-# Utilizando as APIs
+# Testing the APIs
 
-## Para testarmos o projeto será necessário utilizar uma ferramente de testes para APIs. Neste desenvolvimento foi utilizado o Postman, sendo assim, utilizarei o mesmo para exemplos.
--   Caso tenha interesse em utilizar o Postman, a documentação para a instalação da ferramenta, no ubunut 20.04, está neste link https://linuxize.com/post/how-to-install-postman-on-ubuntu-20-04/
+## For this tests we were using Postman, feel free to test it as you wish.
+-   This is the steps to install postman in case you want it:
 
-## Utilizando o postman
--   Para todos os teste você deve, com a aplicação rodando, criar um request no postman (caso ainda não possua) através do menu File>New
+    https://linuxize.com/post/how-to-install-postman-on-ubuntu-20-04/
+
+## Postman
+-   For all tests you should create a request using File > New
 
 ## Twitter Service
--   Após ter o request criado você irá informar o método GET e a seguinte URL:
+-   After creating the postman request you should inform the GET method and insert the following URL:
     -   http://localhost:8081/rest/tweetsTotal/{username}
-        - Altere {username} para o usuario que voce deseja visualizar a quantidade de tweets
 
 ## Github Service
--   Após ter o request criado você irá informar o método GET e a seguinte URL:
+-   After creating the postman request you should inform the GET method and insert the following URL:
     -   http://localhost:8082/rest/reposTotal/{username}
-        - Altere {username} para o usuario que você deseja visualizar a quantidade de repositérios públicos
 
 ## Twitter and Github Service
--   Após ter o request criado você irá informar o método GET e a seguinte URL:
     -   http://localhost:8080/rest/twitterAndGithub?usergithub={userGit}&usertwitter={userTwitter}
-        - Altere {userGit} para o usuário que voce deseja visualizar a quantidade de repositorios publicos
-        - Altere {userTwitter} para o usuário que você deseja visualizar a quantidade de tweets
+        - Change {userGit} to the one you want to see the ammount of public repos
+        - Change {userTwitter} to the one you want to see the ammount of tweets
     
-    -   Você tambem  pode acessar a visualizacao individual atraves das seguintes urls
+    -   You can also do individual requests
         -   http://localhost:8080/rest/tweets/{username}
         -   http://localhost:8080/rest/github/{username}
-            - Sempre lembrando que você deve alterar a variavel {username} para o usuário que desejar
